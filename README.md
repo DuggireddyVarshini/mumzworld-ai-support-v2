@@ -1,3 +1,4 @@
+GitHub Repo: https://github.com/DuggireddyVarshini/mumzworld-ai-support-v2
 # 🤖 Mumzworld AI Support System (Track A - AI Engineering Intern)
 
 > Production-grade AI-native multilingual customer support system for e-commerce (Mumzworld use case) built with intent classification, retrieval-augmented responses, embeddings, structured outputs, and evaluation framework in English + Arabic.
