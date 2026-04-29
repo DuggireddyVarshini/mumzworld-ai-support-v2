@@ -1,0 +1,17 @@
+[
+  {
+    "q": "What is your refund policy?",
+    "a_en": "Refunds are allowed within 30 days if items are unused.",
+    "a_ar": "يمكن استرداد الأموال خلال 30 يومًا إذا لم يتم استخدام المنتج."
+  },
+  {
+    "q": "Do you ship internationally?",
+    "a_en": "Yes, we support international shipping.",
+    "a_ar": "نعم، نحن ندعم الشحن الدولي."
+  },
+  {
+    "q": "How can I track my order?",
+    "a_en": "Please provide your order ID to track your shipment.",
+    "a_ar": "يرجى تقديم رقم الطلب لتتبع الشحنة."
+  }
+]
