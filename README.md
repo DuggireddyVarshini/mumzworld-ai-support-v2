@@ -63,7 +63,9 @@ Every response follows strict schema:
 - confidence
 - faq_used (optional)
 
-### 📊 Evaluation System
+---
+
+## 📊 Evaluation System
 - 12+ test cases (normal + adversarial inputs)
 - Accuracy measurement (~91.6%)
 - Robustness testing on noise inputs
@@ -211,3 +213,62 @@ This project demonstrates how real-world AI support systems are built using:
 - Multilingual response generation
 
 Designed specifically for real e-commerce AI workflows like Mumzworld (English + Arabic support).
+
+---
+
+## 🔄 Tradeoffs
+
+Chose a hybrid intent system (rules + embeddings) instead of a large LLM to keep the system lightweight, deterministic, and fast for CLI-based execution.  
+Avoided fine-tuning a transformer model due to time constraints (~5-hour scope) and instead focused on retrieval + semantic matching, which gives strong performance with less complexity.  
+Used a simple RAG-style FAQ retrieval instead of a full vector database (like Pinecone/FAISS deployment) to keep the system portable and easy to run locally.  
+Prioritized structured outputs + reliability over generative creativity to ensure production-like behavior for customer support use cases.  
+
+---
+
+## 🧪 Tooling Explanation
+
+SentenceTransformers → used for semantic embeddings to capture meaning beyond keyword matching.  
+Scikit-learn → baseline support for lightweight classification logic and evaluation utilities.  
+Custom RAG retrieval layer → implemented FAQ similarity matching without external vector DB.  
+Pydantic-style validation → ensures structured JSON output consistency.  
+ChatGPT (development support) → used for:  
+- refining architecture design  
+- generating edge-case test scenarios  
+- debugging classification issues  
+- improving multilingual response formatting logic  
+
+---
+
+## ⚠️ Failure Analysis / Known Weaknesses
+
+Short or ambiguous inputs (e.g., “ok”, “123”, “help”) may still fall into low-confidence or incorrect intent buckets.  
+Arabic output is Modern Standard Arabic only, and may not fully reflect regional dialect variations used in GCC conversations.  
+Embedding similarity can occasionally misclassify semantically vague queries that overlap across multiple intents.  
+System has no memory or session context, so multi-turn conversations are treated independently.  
+Synthetic FAQ dataset limits real-world coverage and may not reflect production-scale diversity.  
+
+---
+
+## 🚀 Run Instructions (Polished Version)
+
+# 1. Create virtual environment
+python -m venv venv  
+venv\Scripts\activate  
+
+# 2. Install dependencies
+pip install -r requirements.txt  
+
+# 3. Run AI support system
+python app.py  
+
+# 4. Run evaluation tests
+python eval.py  
+
+Expected behavior:
+
+CLI starts interactive chat system  
+Users can enter natural language queries  
+System returns structured JSON responses  
+eval.py prints accuracy (~91% expected)  
+
+---
