@@ -1,6 +1,11 @@
-# 🤖 Mumzworld AI Support System (Track A – AI Engineering Intern)
+# 🤖 Mumzworld AI Support System (Track A - AI Engineering Intern)
 
-> Production-ready AI customer support system for Mumzworld with semantic understanding, multilingual responses, retrieval-augmented generation (RAG), and structured output validation.
+> Production-grade AI-native multilingual customer support system for e-commerce (Mumzworld use case) built with intent classification, retrieval-augmented responses, embeddings, structured outputs, and evaluation framework in English + Arabic.
+
+[![Python](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/)
+[![AI](https://img.shields.io/badge/AI-Native-green.svg)]()
+[![NLP](https://img.shields.io/badge/NLP-Embeddings-orange.svg)]()
+[![Status](https://img.shields.io/badge/Status-Prototype-brightgreen.svg)]()
 
 ---
 
@@ -10,37 +15,105 @@ This project is an AI-native customer support system designed for Mumzworld, the
 
 The system is built to simulate a real-world production support assistant that can understand paraphrased queries, retrieve relevant FAQ knowledge, respond in multiple languages, and provide structured outputs with confidence scoring and fallback handling for unknown inputs.
 
+It is not a simple chatbot. It is an AI pipeline combining:
+- Intent classification (rule + semantic)
+- Embedding-based similarity matching
+- Retrieval-Augmented Generation (FAQ grounding)
+- Structured JSON output validation
+- Confidence scoring + uncertainty handling
+- Evaluation framework with measurable accuracy
+
 ---
 
-## 🚀 Key Features
+## 🧠 Problem It Solves
 
-The system supports semantic intent detection using sentence embeddings instead of keyword matching, enabling it to understand paraphrased queries like “I want my money back”, “refund please”, and “return my payment” as the same intent. It includes a lightweight RAG system that retrieves relevant FAQ answers using cosine similarity, ensuring responses are grounded in predefined knowledge rather than hallucination.
+Customer support teams face:
+- Repeated queries (refunds, delays, returns)
+- Mixed English + Arabic messages
+- Unstructured user inputs
+- Slow manual response handling
+- Inconsistent responses across agents
 
-It provides multilingual responses in English and Arabic, confidence scoring for every prediction, structured JSON output validated using Pydantic, and safe fallback behavior for unknown or noisy inputs. The system also includes an evaluation pipeline that measures accuracy across real and adversarial test cases.
+This system solves it by automatically:
+- Understanding intent
+- Retrieving relevant policy context
+- Generating structured bilingual responses
+- Handling uncertainty safely
+
+---
+
+## ⚙️ Key Features
+
+### 🧩 AI Capabilities
+- Intent classification (refund, delay, product issue, order status, policy, shipping, unknown)
+- Semantic understanding using sentence embeddings
+- FAQ retrieval using similarity search (RAG-style)
+- Confidence scoring per prediction
+- Safe fallback for unknown queries
+
+### 🌍 Multilingual Output
+- Native English responses
+- Native Arabic responses (not literal translation style)
+
+### 🧠 Structured Output
+Every response follows strict schema:
+- intent
+- response_en
+- response_ar
+- confidence
+- faq_used (optional)
+
+### 📊 Evaluation System
+- 12+ test cases (normal + adversarial inputs)
+- Accuracy measurement (~91.6%)
+- Robustness testing on noise inputs
+- Unknown intent detection validation
 
 ---
 
 ## 🏗️ Architecture
 
-User input is first normalized and converted into embeddings using SentenceTransformer. The embedding is then used for semantic similarity matching against predefined intent examples and FAQ knowledge. The system determines intent using a hybrid logic combining similarity scores and rule-based fallback conditions. Once intent is identified, a response is generated using either FAQ retrieval (RAG) or template-based responses. A confidence score is computed based on similarity strength, and the final output is validated using a structured schema before being returned.
+User Input → Classifier (Rule + Embedding) → Retriever (FAQ similarity) → RAG Context Injection → Response Generator → Pydantic Validator → Final Structured JSON Output
 
 ---
 
-## 🧠 Core Capabilities
+## 📁 Project Structure
 
-The system understands real-world paraphrased user queries, supports bilingual response generation (English and Arabic), retrieves grounded FAQ responses using semantic search, handles unknown or noisy inputs safely, and provides confidence scoring for all predictions. It is designed to avoid hallucination by relying only on retrieved knowledge and predefined intent mappings.
+app.py → CLI interface  
+classifier.py → intent classification engine  
+embeddings.py → sentence transformer embeddings  
+rag.py → FAQ retrieval system  
+response.py → response generation (EN + AR)  
+validator.py → structured schema validation (Pydantic)  
+eval.py → evaluation pipeline (accuracy testing)  
+config.py → intents + FAQ dataset  
+data.py → sample training/FAQ data  
+tools.py → utility functions  
+utils.py → helper functions  
+policies.txt → business rules  
 
 ---
 
-## 📊 Evaluation Results
+## 🚀 How to Run
 
-The system achieves approximately 91% accuracy on a mixed evaluation dataset consisting of customer support scenarios such as refund requests, order delays, product issues, shipping queries, and random noise inputs. It correctly handles paraphrased inputs, unknown queries, and maintains stable multilingual response quality across test cases.
+1. Create virtual environment:
+python -m venv venv  
+venv\Scripts\activate  
+
+2. Install dependencies:
+pip install -r requirements.txt  
+
+3. Run system:
+python app.py  
+
+4. Run evaluation:
+python eval.py  
 
 ---
 
-## 🧪 Sample Outputs
+## 💬 Example Outputs
 
-Input: "I want my money back"
+User: I want my money back  
 {
   "intent": "refund_request",
   "response_en": "Refund is available within 30 days if the product is unused.",
@@ -49,100 +122,92 @@ Input: "I want my money back"
   "faq_used": "Returns accepted within 30 days of purchase."
 }
 
-Input: "my order is late"
+User: my order is late  
 {
   "intent": "delay_issue",
   "response_en": "Your order may be delayed. Please share your order ID.",
   "response_ar": "قد يكون طلبك متأخراً. يرجى مشاركة رقم الطلب.",
-  "confidence": 0.89,
-  "faq_used": null
+  "confidence": 0.66
 }
 
-Input: "asdfgh"
+User: asdfgh random text  
 {
   "intent": "unknown",
   "response_en": "I need more details to help you.",
   "response_ar": "أحتاج إلى مزيد من التفاصيل لمساعدتك.",
-  "confidence": 0.18,
-  "faq_used": null
+  "confidence": 0.18
 }
 
 ---
 
-## 📁 Project Structure
+## 📊 Evaluation Results
 
-app.py → CLI interface for interaction  
-classifier.py → semantic + rule-based intent classification  
-embeddings.py → sentence transformer embedding generation  
-rag.py → FAQ retrieval system using similarity search  
-config.py → intents and FAQ dataset  
-schema.py → structured output validation using Pydantic  
-eval.py → evaluation pipeline  
-utils.py → helper utilities  
+- Test cases: 12  
+- Accuracy: 91.6%  
+- Robustness: Handles noisy + adversarial inputs  
+- Unknown detection: Working correctly  
+- Confidence calibration: Stable across intents  
 
 ---
 
-## ⚙️ Setup Instructions
+## 🧠 Why This Is AI Engineering (Not Just ML)
 
-Clone the repository using git clone https://github.com/DuggireddyVarshini/mumzworld-ai-support-v2.git then navigate into the folder. Create a virtual environment using python -m venv venv and activate it using venv\Scripts\activate on Windows or source venv/bin/activate on Linux/Mac. Install dependencies using pip install -r requirements.txt. Run the application using python app.py. Run evaluation using python eval.py.
-
----
-
-## 📦 Requirements
-
-sentence-transformers  
-numpy  
-scikit-learn  
-faiss-cpu  
-pydantic  
-
----
-
-## 🧠 Design Decisions
-
-The system uses embeddings instead of keyword matching to handle real-world paraphrasing. A lightweight RAG system is used to ensure responses are grounded in FAQ knowledge instead of hallucinated outputs. A hybrid architecture combining rules and semantic similarity ensures stability and robustness. Confidence scoring is used to indicate uncertainty and improve reliability in production-like scenarios.
+This system includes:
+- Agent-like pipeline (classifier → retriever → generator)
+- Embedding-based semantic retrieval (RAG)
+- Structured output enforcement (Pydantic validation)
+- Uncertainty-aware responses (confidence scoring + fallback)
+- Multilingual generation (English + Arabic)
 
 ---
 
 ## ⚠️ Limitations
 
-The system does not use a large language model due to assignment constraints. The FAQ dataset is synthetic and can be expanded with real customer data. The system runs in CLI mode without a frontend interface.
+- No external LLM API used (lightweight local model design)
+- Dataset is synthetic (expandable with real data)
+- CLI-based interface (no frontend UI yet)
+- No persistent memory layer
 
 ---
 
-## 🚀 Future Improvements
+## 🔥 Future Improvements
 
-Future versions can include FastAPI deployment, React-based support dashboard, integration with LLMs like GPT or Llama 3 for response generation, real-time analytics dashboard, cloud deployment on AWS or Azure, and conversation memory for contextual support.
-
----
-
-## 🧪 Evaluation Summary
-
-The system has been evaluated on 12+ test cases with an accuracy of approximately 91%. It performs well on paraphrased inputs, unknown query detection, and multilingual response generation while maintaining consistent confidence scoring.
-
----
-
-## 🧰 Tools Used
-
-SentenceTransformers (MiniLM), Scikit-learn, FAISS / cosine similarity, Pydantic validation, Python CLI system.
+- Fine-tuned transformer classifier
+- Vector database (FAISS / Pinecone)
+- Real-time dashboard for support analytics
+- WhatsApp / chat UI integration
+- Human escalation workflow
+- Production API deployment (FastAPI)
 
 ---
 
-## ⏱️ Time Breakdown
+## 🧪 Tools Used
 
-Problem design: 1 hour  
-Core implementation: 2 hours  
-Embeddings + RAG: 1 hour  
-Evaluation: 1 hour  
-
----
-
-## 📌 Final Note
-
-This project demonstrates real-world AI engineering capability including semantic search, retrieval-augmented generation, multilingual response handling, structured output validation, and evaluation-driven development. It is designed as a production-style AI support system aligned with real e-commerce use cases like Mumzworld.
+- SentenceTransformers
+- Scikit-learn
+- Embedding similarity search
+- Pydantic validation
+- Python CLI system
+- Custom evaluation pipeline
 
 ---
 
-## 🔗 GitHub Repository
+## ⏱ Time Log
 
-https://github.com/DuggireddyVarshini/mumzworld-ai-support-v2
+- Design: 1 hour  
+- AI pipeline: 2 hours  
+- Implementation: 1.5 hours  
+- Evaluation: 0.5 hour  
+
+---
+
+## 📌 Key Insight
+
+This project demonstrates how real-world AI support systems are built using:
+- Semantic understanding (embeddings)
+- Retrieval augmentation (RAG)
+- Structured outputs (validation)
+- Evaluation-driven development
+- Multilingual response generation
+
+Designed specifically for real e-commerce AI workflows like Mumzworld (English + Arabic support).
